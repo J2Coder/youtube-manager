@@ -1,3 +1,5 @@
+<img width="1254" height="1254" alt="Logo_Original" src="https://github.com/user-attachments/assets/109f4a39-9cf3-48c4-a67f-283b9810528f" />
+
 # Gerenciador YouTube
 
 Extensão para Chrome, Brave e Edge que permite gerenciar vídeos curtidos, a lista Assistir mais tarde, playlists e inscrições do YouTube.
