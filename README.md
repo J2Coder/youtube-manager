@@ -51,9 +51,9 @@ A instalação é feita manualmente, pelo modo de desenvolvedor do navegador.
 1. Acesse este repositório e clique em `Code` e depois em `Download ZIP`.
 2. Extraia o arquivo baixado.
 3. Abra a página de extensões do navegador:
-   - Chrome: `chrome://extensions/`
-   - Brave:  `brave://extensions/`
-   - Edge:   `edge://extensions/`
+   - Chrome:    `chrome://extensions/`
+   - Brave:     `brave://extensions/`
+   - Edge:      `edge://extensions/`
 4. Ative o modo do desenvolvedor.
 5. Clique em `Carregar sem compactação`.
 6. Selecione a pasta que contém diretamente o arquivo `manifest.json`.
