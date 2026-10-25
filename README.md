@@ -1,10 +1,10 @@
-<img width="1254" height="1254" alt="Logo_Original" src="https://github.com/user-attachments/assets/109f4a39-9cf3-48c4-a67f-283b9810528f" />
+<img width="1200" height="500" alt="banner_gerenciador_youtube" src="https://github.com/user-attachments/assets/9cc3446c-da09-47e6-a793-62099e53e95f" />
 
 # Gerenciador YouTube
 
 Extensão para Chrome, Brave e Edge que permite gerenciar vídeos curtidos, a lista Assistir mais tarde, playlists e inscrições do YouTube.
 
-Desenvolvido por [J2Coder](https://github.com/J2Coder).
+Desenvolvido por [Jorge Wellington Gonçalves Barbosa](https://github.com/jorge-wellington).
 
 ## Funcionalidades
 
@@ -52,8 +52,8 @@ A instalação é feita manualmente, pelo modo de desenvolvedor do navegador.
 2. Extraia o arquivo baixado.
 3. Abra a página de extensões do navegador:
    - Chrome: `chrome://extensions/`
-   - Brave: `brave://extensions/`
-   - Edge: `edge://extensions/`
+   - Brave:  `brave://extensions/`
+   - Edge:   `edge://extensions/`
 4. Ative o modo do desenvolvedor.
 5. Clique em `Carregar sem compactação`.
 6. Selecione a pasta que contém diretamente o arquivo `manifest.json`.
@@ -112,7 +112,7 @@ Recomenda-se testar primeiro com poucos vídeos e utilizar o modo Seguro.
 Se encontrar um problema:
 
 1. Clique em `Copiar diagnóstico` no rodapé da extensão.
-2. Acesse as [Issues do projeto](https://github.com/J2Coder/youtube-manager/issues).
+2. Acesse as [Issues do projeto](https://github.com/jorge-wellington/youtube-manager/issues).
 3. Abra uma nova issue com a descrição do problema e as informações relevantes do diagnóstico.
 
 Antes de compartilhar o diagnóstico, confira se ele não contém informações pessoais que você não deseja divulgar.
@@ -121,6 +121,6 @@ Nunca publique senhas, cookies ou tokens de sessão.
 
 ## Licença
 
-Este projeto é de autoria de [J2Coder](https://github.com/J2Coder). Até que uma licença seja definida e publicada neste repositório, todos os direitos autorais são reservados.
+Este projeto é de autoria de [Jorge Wellington Gonçalves Barbosa](https://github.com/jorge-wellington). Até que uma licença seja definida e publicada neste repositório, todos os direitos autorais são reservados.
 
 A disponibilização pública do código não concede, por si só, autorização para copiar, modificar ou redistribuir o projeto.
