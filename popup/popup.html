@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerenciador YouTube</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img class="logo" src="../icons/logo-extension.png" alt="">
+      <h1>Gerenciador YouTube</h1>
+    </div>
+    <button id="theme" class="ghost small" type="button">Tema: automático</button>
+  </header>
+
+  <section id="gate" class="gate" hidden>
+    <p id="gateMsg"></p>
+    <button id="gateBtn" class="btn primary" type="button"></button>
+  </section>
+
+  <main id="app" hidden>
+    <nav class="tabs" id="tabs" aria-label="O que limpar">
+      <button type="button" data-tab="likes" class="tab" title="Vídeos marcados como &quot;Gostei&quot;.">Curtidos</button>
+      <button type="button" data-tab="later" class="tab" title="Vídeos salvos para assistir mais tarde.">Mais tarde</button>
+      <button type="button" data-tab="playlists" class="tab" title="Playlists criadas por você; não inclui as listas automáticas do YouTube.">Playlists</button>
+      <button type="button" data-tab="subs" class="tab">Inscrições</button>
+    </nav>
+
+    <div class="scroll">
+      <!-- ===== Curtidos / Mais tarde / Playlists ===== -->
+      <section id="paneList">
+        <div id="plPicker" class="block" hidden>
+          <label class="label" for="plSel">Playlist</label>
+          <select id="plSel"></select>
+          <div class="row-gap">
+            <button id="plLoad" class="btn small" type="button">Listar minhas playlists</button>
+            <span id="plHint" class="hint"></span>
+          </div>
+        </div>
+
+        <div id="vIntro" class="block">
+          <p id="introText" class="lead"></p>
+          <p id="introNote" class="msg warn" hidden></p>
+          <button id="btnRead" class="btn primary wide" type="button">Ler minha lista</button>
+        </div>
+
+        <div id="vReading" class="block" hidden>
+          <div class="bar indeterminate"><i></i></div>
+          <p id="readText" class="lead"></p>
+          <button id="btnStopRead" class="btn danger wide" type="button">Parar leitura</button>
+        </div>
+
+        <div id="vReady" class="block" hidden>
+          <p class="label">O que você quer remover?</p>
+          <div class="chips" id="fTabs">
+            <button type="button" class="chip" data-mode="all" title="Remove todos os vídeos da lista.">Tudo</button>
+            <button type="button" class="chip" data-mode="channel" title="Escolha canais e remova só os vídeos deles. Dá para inverter: manter esses canais e remover o resto.">Canal</button>
+            <button type="button" class="chip" data-mode="period" title="Remove conforme há quanto tempo o vídeo foi publicado. O YouTube não informa quando VOCÊ curtiu, só quando o vídeo foi postado.">Período</button>
+            <button type="button" class="chip" data-mode="pos" title="A lista costuma vir com os mais recentes primeiro. Aqui você remove só os N primeiros ou os N últimos.">Posição</button>
+          </div>
+
+          <div id="fAll" class="fpane"><p class="hint">Vai remover todos os vídeos da lista.</p></div>
+
+          <div id="fChan" class="fpane" hidden>
+            <input id="chSearch" type="search" placeholder="Buscar canal pelo nome..." autocomplete="off">
+            <div id="chList" class="list short" role="group" aria-label="Canais"></div>
+            <div class="row-gap">
+              <label class="check"><input id="chInvert" type="checkbox"> Manter os marcados e remover o resto</label>
+              <button id="chClear" class="ghost small" type="button">Limpar</button>
+            </div>
+          </div>
+
+          <div id="fPeriod" class="fpane" hidden>
+            <select id="perDir">
+              <option value="older">Publicados há mais de</option>
+              <option value="within">Publicados nos últimos</option>
+            </select>
+            <div class="row-gap">
+              <input id="perNum" type="number" min="1" value="1" class="num">
+              <select id="perUnit">
+                <option value="1">dias</option>
+                <option value="7">semanas</option>
+                <option value="30">meses</option>
+                <option value="365" selected>anos</option>
+              </select>
+            </div>
+            <p class="hint">A data usada é a da publicação do vídeo. O YouTube não mostra quando você curtiu.</p>
+          </div>
+
+          <div id="fPos" class="fpane" hidden>
+            <div class="row-gap">
+              <select id="posSel">
+                <option value="recent">Os primeiros da lista (mais recentes)</option>
+                <option value="oldest">Os últimos da lista (mais antigos)</option>
+              </select>
+              <input id="posNum" type="number" min="1" value="100" class="num">
+            </div>
+          </div>
+
+          <p id="countLine" class="count"></p>
+          <div id="speedSlotReady"></div>
+          <button id="btnStart" class="btn primary wide" type="button">Iniciar</button>
+        </div>
+
+        <div id="vRun" class="block" hidden>
+          <div class="grid2">
+            <div class="stat"><b id="stFound">0</b><span>Na sua lista</span></div>
+            <div class="stat"><b id="stDone">0</b><span>Removidos</span></div>
+            <div class="stat"><b id="stLeft">0</b><span>Faltam</span></div>
+            <div class="stat"><b id="stRate">--</b><span>Vídeos por minuto</span></div>
+          </div>
+          <div class="bar"><i id="bar"></i></div>
+          <p id="runInfo" class="hint"></p>
+          <div id="speedSlotRun"></div>
+          <div class="row-gap">
+            <button id="btnPause" class="btn" type="button">Pausar</button>
+            <button id="btnStop" class="btn danger" type="button">Parar</button>
+          </div>
+        </div>
+
+        <div id="vDone" class="block" hidden>
+          <p id="doneText" class="lead"></p>
+          <button id="btnAgain" class="btn primary wide" type="button">Ler a lista de novo</button>
+        </div>
+
+        <p id="listMsg" class="msg" hidden></p>
+
+        <div id="speedBox" class="speedbox">
+          <p class="label">Velocidade</p>
+          <div id="speedRow" class="chips"></div>
+          <p id="speedDesc" class="hint"></p>
+        </div>
+      </section>
+
+      <!-- ===== Inscrições ===== -->
+      <section id="paneSubs" hidden>
+        <div class="block">
+          <p class="lead">Veja os canais em que você está inscrito, marque os que quer sair e cancele todos de uma vez.</p>
+          <div class="row-gap">
+            <button id="subsLoad" class="btn primary" type="button">Carregar canais</button>
+            <span id="subsCount" class="hint">Nenhum canal carregado.</span>
+          </div>
+          <input id="subsSearch" type="search" placeholder="Buscar canal pelo nome..." autocomplete="off" disabled>
+          <div class="row-gap">
+            <button id="subsAll" class="ghost small" type="button" disabled>Marcar todos os visíveis</button>
+            <button id="subsClear" class="ghost small" type="button" disabled>Limpar marcados</button>
+          </div>
+          <div id="subsList" class="list tall" role="group" aria-label="Canais inscritos"></div>
+
+          <div id="subsRun" hidden>
+            <div class="bar"><i id="subsBar"></i></div>
+            <p id="subsRunText" class="hint"></p>
+            <button id="subsStop" class="btn danger wide" type="button">Parar</button>
+          </div>
+
+          <button id="subsUnsub" class="btn danger wide" type="button" disabled>Cancelar inscrição nos marcados</button>
+          <p id="subsMsg" class="msg" hidden></p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <button id="diag" class="ghost small" type="button" title="Copia um relatório técnico (sem senhas nem dados de login) para você colar numa conversa se algo der errado.">Copiar diagnóstico</button>
+    <button id="donate" class="support small" type="button" title="Ajuda o desenvolvedor a sempre atualizar a extensão e a adicionar novas funcionalidades e melhorias.">♥ Apoiar</button>
+    <a id="credit" class="credit" href="https://github.com/J2Coder" target="_blank" rel="noopener noreferrer" title="Abrir o GitHub do J2Coder">
+      <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span>Criado por <strong>J2Coder</strong></span>
+    </a>
+  </footer>
+
+  <dialog id="donateDialog" class="donate-dialog" aria-labelledby="donateTitle">
+    <button id="donateClose" class="dialog-close" type="button" aria-label="Fechar">×</button>
+    <img class="pix-qr" src="pix-qrcode.png" alt="QR Code Pix para apoiar J2Coder">
+    <h2 id="donateTitle">Apoie o Gerenciador YouTube</h2>
+    <p>Seu apoio ajuda a manter a extensão atualizada e receber novas melhorias.</p>
+    <label class="label" for="pixKey">Chave Pix</label>
+    <div class="pix-key-row">
+      <code id="pixKey">4a9c4dc6-2f3e-4ce7-b405-904796c313c8</code>
+      <button id="copyPix" class="btn small" type="button">Copiar</button>
+    </div>
+    <p id="pixStatus" class="hint" aria-live="polite"></p>
+  </dialog>
+
+  <script src="popup.js"></script>
+</body>
+</html>

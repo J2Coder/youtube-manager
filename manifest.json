@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Utilitário YouTube | Desenvolvido por <J2Coder>",
+  "version": "0.1.5",
+  "description": "Limpe curtidos, Assistir mais tarde, playlists e inscrições do YouTube em poucos cliques, com filtros por canal e período.",
+  "author": "J2Coder",
+  "homepage_url": "https://github.com/J2Coder",
+  "minimum_chrome_version": "111",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "Utilitário YouTube | Desenvolvido por <J2Coder>",
+    "default_popup": "popup/popup.html",
+    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png" }
+  },
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "content_scripts": [
+    {
+      "matches": ["https://youtube.com/*", "https://*.youtube.com/*"],
+      "js": ["src/page-bridge.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://youtube.com/*", "https://*.youtube.com/*"],
+      "js": ["src/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
