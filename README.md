@@ -57,20 +57,20 @@ A instalação é feita manualmente, pelo modo de desenvolvedor do navegador.
 6. Selecione a pasta que contém diretamente o arquivo `manifest.json`.
 7. Abra o YouTube e clique no ícone da extensão.
 
-A extensão requer Chrome, Brave ou Edge versão 111 ou superior. O Firefox não foi testado.
+A extensão requer Chrome, Brave ou Edge (não testado nos demais navegadores).
 
 Para atualizar a extensão após modificar os arquivos, acesse a página de extensões e clique em `Recarregar`.
 
 ## Estrutura do projeto
 
 ```text
-icons/              Ícones da extensão
-popup/              Interface do usuário
-src/content.js      Leitura das listas e execução das operações
-src/page-bridge.js  Comunicação com a página do YouTube
-tests/engine.test.js Testes do motor de processamento
-manifest.json       Configuração da extensão
-README.md           Documentação
+icons/                 Ícones da extensão
+popup/                 Interface do usuário
+src/content.js         Leitura das listas e execução das operações
+src/page-bridge.js     Comunicação com a página do YouTube
+tests/engine.test.js   Testes do motor de processamento
+manifest.json          Configuração da extensão
+README.md              Documentação
 ```
 
 ## Permissões
@@ -100,7 +100,6 @@ Os testes verificam a lógica do processamento, mas não garantem compatibilidad
 
 - A extensão utiliza endpoints internos do YouTube, que podem mudar sem aviso.
 - O YouTube não informa quando um vídeo foi curtido. O filtro de período considera a data de publicação.
-- Vídeos privados, excluídos ou inacessíveis podem não ser removidos.
 - O YouTube pode limitar operações realizadas em sequência.
 - O funcionamento depende da estrutura atual das páginas e dos serviços do YouTube.
 
