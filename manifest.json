@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Utilitário YouTube | Desenvolvido por <J2Coder>",
+  "name": "Youtube Manager",
   "version": "0.1.5",
   "description": "Limpe curtidos, Assistir mais tarde, playlists e inscrições do YouTube em poucos cliques, com filtros por canal e período.",
-  "author": "J2Coder",
-  "homepage_url": "https://github.com/J2Coder",
+  "author": "Jorge Wellington Gonçalves Barbosa",
+  "homepage_url": "https://github.com/jorge-wellington",
   "minimum_chrome_version": "111",
   "permissions": ["activeTab", "scripting"],
   "action": {
-    "default_title": "Utilitário YouTube | Desenvolvido por <J2Coder>",
+    "default_title": "Youtube Manager",
     "default_popup": "popup/popup.html",
     "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png" }
   },
