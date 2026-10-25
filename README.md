@@ -119,4 +119,6 @@ Nunca publique senhas, cookies ou tokens de sessão.
 
 ## Licença
 
-A licença do projeto ainda não foi definida. Até que seja publicada, não presuma que o código pode ser reutilizado ou redistribuído livremente.
+Este projeto é de autoria de [J2Coder](https://github.com/J2Coder). Até que uma licença seja definida e publicada neste repositório, todos os direitos autorais são reservados.
+
+A disponibilização pública do código não concede, por si só, autorização para copiar, modificar ou redistribuir o projeto.
