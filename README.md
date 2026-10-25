@@ -1,70 +1,123 @@
-# Limpeza de Listas do YouTube
+# Gerenciador YouTube
 
-Extensão (Manifest V3) para limpar suas listas do YouTube em poucos cliques. Feita por [J2Coder](https://github.com/J2Coder).
+Extensão para Chrome, Brave e Edge que permite gerenciar vídeos curtidos, a lista Assistir mais tarde, playlists e inscrições do YouTube.
 
-## O que faz
+Desenvolvido por [J2Coder](https://github.com/J2Coder).
 
-Ao clicar no ícone, o popup já abre com quatro abas:
+## Funcionalidades
 
-| Aba | O que faz |
-| --- | --- |
-| **Curtidos** | Remove vídeos da lista "Gostei". |
-| **Mais tarde** | Remove vídeos de "Assistir mais tarde". |
-| **Playlists** | Remove vídeos de uma playlist sua (a aberta agora ou uma da sua conta). |
-| **Inscrições** | Lista seus canais, busca por nome, mostra a contagem e cancela a inscrição nos marcados. |
+### Curtidos
+Remove vídeos da lista "Gostei", com opções para selecionar quais vídeos serão removidos.
 
-Nas três primeiras abas você escolhe **o que remover**: Tudo, por Canal, por Período (publicados há mais de / nos últimos X dias, semanas, meses ou anos) ou por Posição (os N primeiros ou os N últimos da lista). A velocidade tem quatro modos: Seguro, Normal, Turbo e MAX.
+### Assistir mais tarde
+Gerencia os vídeos salvos para assistir posteriormente.
 
-A remoção roda dentro da aba do YouTube: dá para fechar o popup, minimizar o navegador ou trocar de aba, desde que a aba do YouTube continue aberta.
+### Playlists
+Permite selecionar uma playlist da sua conta e remover vídeos dela.
 
-## Instalar para testar (sem empacotar)
+### Inscrições
+Lista os canais inscritos, permite pesquisar por nome e cancelar inscrições de vários canais selecionados.
 
-1. Extraia o ZIP. Vai surgir a pasta `limpeza-youtube`.
-2. Abra `chrome://extensions` (ou `brave://extensions`) e ligue o **Modo do desenvolvedor**.
-3. Clique em **Carregar sem compactação** e escolha a pasta `limpeza-youtube`.
-4. Clique no ícone da extensão em qualquer página de `youtube.com`. Ela se conecta à aba automaticamente.
+## Filtros de remoção
 
-Ao atualizar os arquivos, clique em **Recarregar** no cartão da extensão. Ao abrir o popup, ela se conecta à aba atual; se o YouTube ainda estiver carregando, use F5 e tente novamente.
+Nas abas Curtidos, Mais tarde e Playlists, é possível escolher quais vídeos serão removidos.
 
-Requer Chrome/Brave/Edge 111 ou mais novo (por causa de `"world": "MAIN"` nos content scripts). Firefox não foi testado.
+- **Tudo:** remove os vídeos encontrados na lista.
+- **Canal:** filtra os vídeos por canal.
+- **Período:** seleciona vídeos com base na data de publicação.
+- **Posição:** seleciona os primeiros ou últimos vídeos da lista.
 
-## Estrutura
+O filtro de período utiliza a data de publicação do vídeo, não a data em que ele foi curtido ou salvo.
 
-```
-manifest.json          configuração e permissões
-popup/                 interface (HTML, CSS e JS)
-src/content.js         motor: lê listas, remove, conferência, inscrições
-src/page-bridge.js     entrega ao motor a configuração pública do YouTube (ytcfg)
-icons/                 ícones
-tests/engine.test.js   teste do motor contra um YouTube simulado
+## Velocidade de execução
+
+A extensão oferece quatro modos de execução:
+
+- **Seguro:** remove um vídeo por vez, com pausas maiores.
+- **Normal:** utiliza intervalos intermediários.
+- **Turbo:** reduz o intervalo entre as operações.
+- **MAX:** utiliza os menores intervalos configurados.
+
+Velocidades maiores podem aumentar a probabilidade de falhas ou limitações impostas pelo YouTube. Para começar, recomenda-se utilizar o modo Seguro.
+
+A remoção é executada na aba do YouTube. O popup pode ser fechado durante o processamento, desde que a aba utilizada permaneça aberta.
+
+## Instalação
+
+A instalação é feita manualmente, pelo modo de desenvolvedor do navegador.
+
+1. Acesse este repositório e clique em `Code` e depois em `Download ZIP`.
+2. Extraia o arquivo baixado.
+3. Abra a página de extensões do navegador:
+   - Chrome: `chrome://extensions/`
+   - Brave: `brave://extensions/`
+   - Edge: `edge://extensions/`
+4. Ative o modo do desenvolvedor.
+5. Clique em `Carregar sem compactação`.
+6. Selecione a pasta que contém diretamente o arquivo `manifest.json`.
+7. Abra o YouTube e clique no ícone da extensão.
+
+A extensão requer Chrome, Brave ou Edge versão 111 ou superior. O Firefox não foi testado.
+
+Para atualizar a extensão após modificar os arquivos, acesse a página de extensões e clique em `Recarregar`.
+
+## Estrutura do projeto
+
+```text
+icons/              Ícones da extensão
+popup/              Interface do usuário
+src/content.js      Leitura das listas e execução das operações
+src/page-bridge.js  Comunicação com a página do YouTube
+tests/engine.test.js Testes do motor de processamento
+manifest.json       Configuração da extensão
+README.md           Documentação
 ```
 
 ## Permissões
 
-- `activeTab` e `scripting`: permitem conectar a extensão à aba atual do YouTube quando você clica no ícone.
-- Content scripts em `youtube.com` e seus subdomínios: necessários para falar com o YouTube usando a sua sessão.
+A extensão utiliza as seguintes permissões e recursos do navegador:
 
-Nada é enviado para servidores de terceiros. Não há telemetria. Os únicos dados guardados (tema, velocidade e aba escolhida) ficam no `localStorage` do popup.
+- `activeTab` e `scripting`: permitem interagir com a aba atual após a ação do usuário.
+- Content scripts no YouTube: permitem acessar os elementos necessários para gerenciar as listas.
+
+As preferências de tema, velocidade e aba selecionada são armazenadas no `localStorage` do popup.
+
+O projeto não utiliza telemetria nem envia dados para servidores de terceiros, conforme a implementação atual.
 
 ## Testes
 
-```
+O projeto inclui um teste automatizado que utiliza um ambiente simulado do YouTube.
+
+Para executá-lo, instale o Node.js e rode:
+
+```bash
 node tests/engine.test.js
 ```
 
-Usa um YouTube simulado. Confirma a lógica, mas **não** garante que o YouTube real responda no mesmo formato.
+Os testes verificam a lógica do processamento, mas não garantem compatibilidade com todas as mudanças do YouTube.
 
 ## Limitações conhecidas
 
-- Usa endpoints internos do YouTube, que não são públicos e podem mudar sem aviso.
-- O YouTube não informa **quando você curtiu**; o filtro de período usa a data de publicação do vídeo.
-- Vídeos privados, apagados ou de outra pessoa podem não sair; o painel avisa quantos.
-- Cancelar inscrições em massa pode ser limitado pelo YouTube. Comece com poucos canais.
+- A extensão utiliza endpoints internos do YouTube, que podem mudar sem aviso.
+- O YouTube não informa quando um vídeo foi curtido. O filtro de período considera a data de publicação.
+- Vídeos privados, excluídos ou inacessíveis podem não ser removidos.
+- O YouTube pode limitar operações realizadas em sequência.
+- O funcionamento depende da estrutura atual das páginas e dos serviços do YouTube.
 
-## Problemas
+Recomenda-se testar primeiro com poucos vídeos e utilizar o modo Seguro.
 
-Clique em **Copiar diagnóstico** no rodapé do popup (não inclui senhas nem dados de login) e abra uma issue em https://github.com/J2Coder com o texto copiado.
+## Problemas e sugestões
+
+Se encontrar um problema:
+
+1. Clique em `Copiar diagnóstico` no rodapé da extensão.
+2. Acesse as [Issues do projeto](https://github.com/J2Coder/youtube-manager/issues).
+3. Abra uma nova issue com a descrição do problema e as informações relevantes do diagnóstico.
+
+Antes de compartilhar o diagnóstico, confira se ele não contém informações pessoais que você não deseja divulgar.
+
+Nunca publique senhas, cookies ou tokens de sessão.
 
 ## Licença
 
-A definir pelo autor.
+A licença do projeto ainda não foi definida. Até que seja publicada, não presuma que o código pode ser reutilizado ou redistribuído livremente.
